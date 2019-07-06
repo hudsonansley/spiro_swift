@@ -18,11 +18,13 @@ struct ContentView : View {
         return Int(value * Double(max - min)) + min
     }
     var body: some View {
-        VStack {
-            PolygonView(sideCount: computeSideCount(sideCountInnerValue, min:minSideCount, max:maxSideCount), scale:CGFloat(0.8), color:Color.red)
-            PolygonView(sideCount: computeSideCount(sideCountOutterValue, min:computeSideCount(sideCountInnerValue, min:minSideCount, max:maxSideCount), max:maxSideCount), scale:CGFloat(1.0), color:Color.blue)
+        let innerSlideCount = computeSideCount(sideCountInnerValue, min:minSideCount, max:maxSideCount)
+        let outterSlideCount = computeSideCount(sideCountOutterValue, min:innerSlideCount, max:maxSideCount)
+        return VStack {
+            PolygonView(sideCount: innerSlideCount, scale:CGFloat(0.8), color:Color.red)
+            PolygonView(sideCount: outterSlideCount, scale:CGFloat(1.0), color:Color.blue)
             SideSlider(value: $sideCountInnerValue, minCount:minSideCount, maxCount:maxSideCount)
-            SideSlider(value: $sideCountOutterValue, minCount:computeSideCount(sideCountInnerValue, min:minSideCount, max:maxSideCount), maxCount:maxSideCount)
+            SideSlider(value: $sideCountOutterValue, minCount:innerSlideCount, maxCount:maxSideCount)
         }
     }
 }
