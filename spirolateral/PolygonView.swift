@@ -1,0 +1,42 @@
+//
+//  PolygonView.swift
+//  spirolateral
+//
+//  Created by Hudson Ansley on 7/6/19.
+//  Copyright © 2019 hlamedia. All rights reserved.
+//
+
+import SwiftUI
+
+struct PolygonView : View {
+    var sideCount:Int
+    var scale:CGFloat = 1.0
+    var color:Color = Color.white
+    var body: some View {
+        GeometryReader { geometry in
+            Path { path in
+                let width: CGFloat = min(geometry.size.width, geometry.size.height) * self.scale
+//                let height = width
+                let r = Double(width / 2)
+                let points = Polygon.pointArray(sides: self.sideCount, x: r, y: r, radius: r, offset: .pi / 4)
+                path.move(
+                    to: points[0]
+                )
+                points.forEach {
+                    path.addLine(
+                        to: $0
+                    )
+                }
+            }
+            .fill(self.color)
+        }
+    }
+}
+
+#if DEBUG
+//struct PolygonView_Previews : PreviewProvider {
+//    static var previews: some View {
+//        PolygonView(sideCount:self.sideCount)
+//    }
+//}
+#endif
