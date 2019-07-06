@@ -21,8 +21,10 @@ struct ContentView : View {
         let innerSlideCount = computeSideCount(sideCountInnerValue, min:minSideCount, max:maxSideCount)
         let outterSlideCount = computeSideCount(sideCountOutterValue, min:innerSlideCount, max:maxSideCount)
         return VStack {
-            PolygonView(sideCount: innerSlideCount, scale:CGFloat(0.8), color:Color.red)
-            PolygonView(sideCount: outterSlideCount, scale:CGFloat(1.0), color:Color.blue)
+            ZStack {
+                PolygonView(sideCount: outterSlideCount, scale:CGFloat(1.0), color:Color.blue)
+                PolygonView(sideCount: innerSlideCount, scale:CGFloat(0.7), color:Color.red)
+            }
             SideSlider(value: $sideCountInnerValue, minCount:minSideCount, maxCount:maxSideCount)
             SideSlider(value: $sideCountOutterValue, minCount:innerSlideCount, maxCount:maxSideCount)
         }
