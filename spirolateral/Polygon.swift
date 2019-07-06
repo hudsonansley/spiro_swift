@@ -11,33 +11,29 @@ import Foundation
 import CoreGraphics
 import UIKit
 
-extension Double {
-    func radians() -> Double {
+extension CGFloat {
+    func radians() -> CGFloat {
         return .pi * self / 180.0
     }
 }
 
 class Polygon:NSObject {
 
-public class func pointArray(sides:Int,x:Double,y:Double,radius:Double,offset:Double)->[CGPoint] {
-    let angle = (360/Double(sides)).radians()
-    let cx = x // x origin
-    let cy = y // y origin
-    let r = radius // radius of circle
-    var i = 0
+public class func pointArray(sides:Int, cx:CGFloat, cy:CGFloat, radius:CGFloat, offsetDegrees:CGFloat) -> [CGPoint] {
+    let angle = (360/CGFloat(sides)).radians()
+    let offset = offsetDegrees.radians()
     var points = [CGPoint]()
-    while i <= sides {
-        let xpo = cx + r * cos(angle * Double(i) - offset.radians())
-        let ypo = cy + r * sin(angle * Double(i) - offset.radians())
-        points.append(CGPoint(x: xpo, y: ypo))
-        i += 1
+    for i in 0...sides {
+        let x = cx + radius * cos(angle * CGFloat(i) - offset)
+        let y = cy + radius * sin(angle * CGFloat(i) - offset)
+        points.append(CGPoint(x: x, y: y))
     }
     return points
 }
 
-private class func path(x:Double, y:Double, radius:Double, sides:Int, offset: Double = 0.0) -> CGPath {
+private class func path(x:CGFloat, y:CGFloat, radius:CGFloat, sides:Int, offsetDegrees: CGFloat = 0.0) -> CGPath {
     let path = CGMutablePath()
-    let points = Polygon.pointArray(sides: sides,x: x,y: y,radius: radius, offset: offset)
+    let points = Polygon.pointArray(sides: sides,cx: x,cy: y,radius: radius, offsetDegrees: offsetDegrees)
     let cpg = points[0]
     path.move(to: cpg)
     for p in points {
@@ -47,8 +43,8 @@ private class func path(x:Double, y:Double, radius:Double, sides:Int, offset: Do
     return path
 }
 
-func drawPolygonBezier(x:Double, y:Double, radius:Double, sides:Int, color:UIColor, offset:Double) -> UIBezierPath {
-    let path = Polygon.path(x: x, y: y, radius: radius, sides: sides, offset: offset)
+func drawPolygonBezier(x:CGFloat, y:CGFloat, radius:CGFloat, sides:Int, color:UIColor, offsetDegrees:CGFloat) -> UIBezierPath {
+    let path = Polygon.path(x: x, y: y, radius: radius, sides: sides, offsetDegrees: offsetDegrees)
     let bez = UIBezierPath(cgPath: path)
     // no need to convert UIColor to CGColor when using UIBezierPath
     color.setFill()
@@ -56,8 +52,8 @@ func drawPolygonBezier(x:Double, y:Double, radius:Double, sides:Int, color:UICol
     return bez
 }
 
-func drawPolygonUsingPath(ctx:CGContext, x:Double, y:Double, radius:Double, sides:Int, color:UIColor, offset:Double) {
-    let path = Polygon.path(x: x, y: y, radius: radius, sides: sides, offset: offset)
+func drawPolygonUsingPath(ctx:CGContext, x:CGFloat, y:CGFloat, radius:CGFloat, sides:Int, color:UIColor, offsetDegrees:CGFloat) {
+    let path = Polygon.path(x: x, y: y, radius: radius, sides: sides, offsetDegrees: offsetDegrees)
     ctx.addPath(path)
     let cgcolor = color.cgColor
 //    ctx.setFillColor(cgcolor)
@@ -67,18 +63,18 @@ func drawPolygonUsingPath(ctx:CGContext, x:Double, y:Double, radius:Double, side
     ctx.strokePath()
 }
 
-func drawPolygon(ctx:CGContext, x:Double, y:Double, radius:Double, sides:Int, color:UIColor, offset:Double) {
+func drawPolygon(ctx:CGContext, x:CGFloat, y:CGFloat, radius:CGFloat, sides:Int, color:UIColor, offsetDegrees:CGFloat) {
 
-    let points = Polygon.pointArray(sides: sides,x: x,y: y,radius: radius, offset: offset)
+    let points = Polygon.pointArray(sides: sides,cx: x,cy: y,radius: radius, offsetDegrees: offsetDegrees)
     ctx.addLines(between: points)
     let cgcolor = color.cgColor
     ctx.setFillColor(cgcolor)
     ctx.fillPath()
 }
-class func makeShapeLayer(x:Double, y:Double, radius:Double, sides:Int, color:UIColor, offset:Double = 0.0) -> CAShapeLayer {
+class func makeShapeLayer(x:CGFloat, y:CGFloat, radius:CGFloat, sides:Int, color:UIColor, offsetDegrees:CGFloat = 0.0) -> CAShapeLayer {
 
     let shape = CAShapeLayer()
-    shape.path = Polygon.path(x: x, y: y, radius: radius, sides: sides, offset: offset)
+    shape.path = Polygon.path(x: x, y: y, radius: radius, sides: sides, offsetDegrees: offsetDegrees)
     shape.strokeColor = color.cgColor
     return shape
 

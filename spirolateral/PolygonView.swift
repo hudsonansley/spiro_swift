@@ -15,9 +15,9 @@ struct PolygonView : View {
     var body: some View {
         GeometryReader { geometry in
             Path { path in
-                let r = Double(min(geometry.size.width, geometry.size.height) / 2)
-                let rScaled = r * Double(self.scale)
-                let points = Polygon.pointArray(sides: self.sideCount, x: r, y: r, radius: rScaled, offset: 90)
+                let r = min(geometry.size.width, geometry.size.height) / 2
+                let rScaled = r * self.scale
+                let points = Polygon.pointArray(sides: self.sideCount, cx: r, cy: r, radius: rScaled, offsetDegrees: 90)
                 path.move(
                     to: points[0]
                 )
