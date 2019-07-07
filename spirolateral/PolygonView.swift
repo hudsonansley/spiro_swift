@@ -30,6 +30,7 @@ struct PolygonView : View {
                         to: $0
                     )
                 }
+                path.closeSubpath()
             }
             .stroke(self.color, lineWidth: self.lineWidth)
         }
