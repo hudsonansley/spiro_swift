@@ -8,12 +8,16 @@
 
 import SwiftUI
 
+let strokeStyle = StrokeStyle(lineWidth:4)
+
 struct PolygonView : View {
     var sideCount:Int
     var scale:CGFloat = 1.0
     var color:Color = Color.white
+    var lineWidth:CGFloat = 8.0
     var body: some View {
         GeometryReader { geometry in
+
             Path { path in
                 let r = min(geometry.size.width, geometry.size.height) / 2
                 let rScaled = r * self.scale
@@ -27,7 +31,7 @@ struct PolygonView : View {
                     )
                 }
             }
-            .fill(self.color)
+            .stroke(self.color, lineWidth: self.lineWidth)
         }
     }
 }
