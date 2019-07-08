@@ -25,6 +25,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             window.rootViewController = UIHostingController(rootView: ContentView())
             self.window = window
             window.makeKeyAndVisible()
+            window.backgroundColor = UIColor.black
         }
     }
 

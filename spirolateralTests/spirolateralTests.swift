@@ -19,7 +19,9 @@ class spirolateralTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testExample() {
+    func testDistance() {
+        XCTAssertEqual(Polygon.distanceSq(CGPoint(x:0, y:0), CGPoint(x:2, y:2)), 8.0)
+        XCTAssertEqual(Polygon.distance(CGPoint(x:0, y:0), CGPoint(x:2, y:2)), CGFloat(8.0.squareRoot()))
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
