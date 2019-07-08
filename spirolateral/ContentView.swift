@@ -15,18 +15,18 @@ struct ContentView : View {
     let outterScale:CGFloat = 1.0
     let innerScale:CGFloat = 0.5
     @State var sideCountOutterValue:CGFloat = 0.5
-    @State var sideCountInnerValue:CGFloat = 0.5
-    func computeSideCount(_ value:CGFloat, min:Int, max:Int) -> Int {
-        return Int(value * CGFloat(max - min)) + min
+    @State var sideCountInnerValue:CGFloat = 0.125
+    @State var sideCountInnerDelta:CGFloat = 0.0
+    @State var sideCountOutterDelta:CGFloat = 0.0
+    func computeSideCount(_ value:CGFloat) -> Int {
+        return Int(value * CGFloat(maxSideCount - minSideCount)) + minSideCount
     }
-    func computeSideValue(_ count:Int, min:Int, max:Int) -> CGFloat {
-        return CGFloat(count - min) / CGFloat(max - min)
+    func computeSideValue(_ count:Int) -> CGFloat {
+        return CGFloat(count - minSideCount) / CGFloat(maxSideCount - minSideCount)
     }
     func clampValue(_ value:CGFloat) -> CGFloat {
         return max( 0.0, min(1.0, value))
     }
-    @State var sideCountInnerDelta:CGFloat = 0.0
-    @State var sideCountOutterDelta:CGFloat = 0.0
     var body: some View {
         var innerValue = clampValue( sideCountInnerValue + sideCountInnerDelta)
         var outterValue = clampValue( sideCountOutterValue + sideCountOutterDelta)
@@ -36,8 +36,8 @@ struct ContentView : View {
         if (sideCountOutterDelta < 0 && innerValue > outterValue) {
             innerValue = outterValue
         }
-        let innerSlideCount = computeSideCount(innerValue, min:minSideCount, max:maxSideCount)
-        let outterSlideCount = computeSideCount(outterValue, min:minSideCount, max:maxSideCount)
+        let innerSlideCount = computeSideCount(innerValue)
+        let outterSlideCount = computeSideCount(outterValue)
         return VStack {
             GeometryReader { geometry in
 
@@ -57,13 +57,11 @@ struct ContentView : View {
                         } else {
                             self.sideCountOutterDelta = delta
                         }
-
-                        print("Dragging \(self.sideCountInnerDelta) \(startDist / r)")
                 }
                 .onEnded { _ in
-                    self.sideCountInnerValue = self.computeSideValue(innerSlideCount, min:self.minSideCount, max:self.maxSideCount)
+                    self.sideCountInnerValue = self.computeSideValue(innerSlideCount)
                     self.sideCountInnerDelta = 0.0
-                    self.sideCountOutterValue = self.computeSideValue(outterSlideCount, min:self.minSideCount, max:self.maxSideCount)
+                    self.sideCountOutterValue = self.computeSideValue(outterSlideCount)
                     self.sideCountOutterDelta = 0.0
                 }
                 )
