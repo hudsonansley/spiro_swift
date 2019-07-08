@@ -48,7 +48,7 @@ struct ContentView : View {
             .gesture(
                 DragGesture(minimumDistance: 10)
                     .onChanged {drag in
-                        let r = CGFloat(min(geometry.size.width, geometry.size.height) / 2)
+                        let r = CGFloat(min(geometry.size.width, geometry.size.height)) / 2.0
                         let startDist = Polygon.distance(CGPoint(x:r, y:r), drag.startLocation)
                         let currentDist = Polygon.distance(CGPoint(x:r, y:r), drag.location)
                         let delta = (currentDist - startDist) / r
