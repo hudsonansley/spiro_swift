@@ -40,7 +40,6 @@ struct ContentView : View {
         let outterSlideCount = computeSideCount(outterValue)
         return VStack {
             GeometryReader { geometry in
-
             ZStack {
                 PolygonView(sideCount: outterSlideCount, scale:CGFloat(self.outterScale), color:Color.blue)
                 PolygonView(sideCount: innerSlideCount, scale:CGFloat(self.innerScale), color:Color.red)
@@ -48,14 +47,18 @@ struct ContentView : View {
             .gesture(
                 DragGesture(minimumDistance: 10)
                     .onChanged {drag in
-                        let r = CGFloat(min(geometry.size.width, geometry.size.height)) / 2.0
+                        let r = Polygon.radius(size:geometry.size)
                         let startDist = Polygon.distance(CGPoint(x:r, y:r), drag.startLocation)
                         let currentDist = Polygon.distance(CGPoint(x:r, y:r), drag.location)
-                        let delta = (currentDist - startDist) / r
+                        let dragDist = Polygon.distance(drag.startLocation, drag.location)
+                        var delta = (currentDist - startDist)
+                        if (delta < 0 && dragDist > -delta) {
+                            delta = -dragDist
+                        }
                         if (startDist / r) < self.innerScale {
-                            self.sideCountInnerDelta = delta
+                            self.sideCountInnerDelta = delta / r
                         } else {
-                            self.sideCountOutterDelta = delta
+                            self.sideCountOutterDelta = delta / r
                         }
                 }
                 .onEnded { _ in
@@ -85,7 +88,7 @@ struct SideSlider : View {
     var body: some View {
         return HStack {
             Text("\(minCount)")
-            Slider(value: $value, from: 0.0, through: 1.0)
+            Slider(value: $value, in: 0.0...1.0, step: 0.05)
             Text("\(maxCount)")
         }
         .padding()

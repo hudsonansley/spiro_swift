@@ -18,14 +18,14 @@ extension CGFloat {
 
 class Polygon:NSObject {
 
-    public class func pointArray(sides:Int, cx:CGFloat, cy:CGFloat, radius:CGFloat, offsetDegrees:CGFloat) -> [CGPoint] {
+    public class func vertices(sides:Int, cx:CGFloat, cy:CGFloat, radius:CGFloat, offsetDegrees:CGFloat) -> [CGPoint] {
         let angle = (360 / CGFloat(sides)).radians()
         let offset = offsetDegrees.radians()
-        var points = [CGPoint]()
-        for i in 0..<sides {
-            let x = cx + radius * cos(angle * CGFloat(i) - offset)
-            let y = cy + radius * sin(angle * CGFloat(i) - offset)
-            points.append(CGPoint(x: x, y: y))
+        let points = (0..<sides).map{
+            CGPoint(
+                x: cx + radius * cos(angle * CGFloat($0) - offset),
+                y: cy + radius * sin(angle * CGFloat($0) - offset)
+            )
         }
         return points
     }
@@ -38,5 +38,9 @@ class Polygon:NSObject {
 
     public class func distance(_ pt0:CGPoint, _ pt1:CGPoint) -> CGFloat {
         return distanceSq(pt0, pt1).squareRoot()
+    }
+
+    public class func radius(size: CGSize) -> CGFloat {
+        return min(size.width, size.height) / 2.0
     }
 }
