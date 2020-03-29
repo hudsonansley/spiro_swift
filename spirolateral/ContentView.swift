@@ -18,6 +18,9 @@ struct ContentView : View {
     @State var sideCountInnerValue:CGFloat = 0.125
     @State var sideCountInnerDelta:CGFloat = 0.0
     @State var sideCountOutterDelta:CGFloat = 0.0
+    @State var gestureStart:Bool = true
+    let minAlpha = 0.1
+    let maxAlpha = 1.0
     func computeSideCount(_ value:CGFloat) -> Int {
         return Int(value * CGFloat(maxSideCount - minSideCount)) + minSideCount
     }
@@ -27,7 +30,21 @@ struct ContentView : View {
     func clampValue(_ value:CGFloat) -> CGFloat {
         return max( 0.0, min(1.0, value))
     }
+    func fadeDown() -> Void {
+        print( "fadeDown")
+        UIViewPropertyAnimator(duration: 1.0, curve: .easeOut, animations: {
+            let x = self.body.opacity(self.minAlpha)
+        }).startAnimation()
+    }
+    func fadeUp() -> Void {
+        print( "fadeUp")
+        UIViewPropertyAnimator(duration: 2.0, curve: .easeOut, animations: {
+            _ = self.body.opacity(self.maxAlpha)
+        }).startAnimation()
+    }
+
     var body: some View {
+        var alphaFade = minAlpha
         var innerValue = clampValue( sideCountInnerValue + sideCountInnerDelta)
         var outterValue = clampValue( sideCountOutterValue + sideCountOutterDelta)
         if (sideCountInnerDelta > 0 && outterValue < innerValue) {
@@ -45,8 +62,12 @@ struct ContentView : View {
                 PolygonView(sideCount: innerSlideCount, scale:CGFloat(self.innerScale), color:Color.red)
             }
             .gesture(
-                DragGesture(minimumDistance: 10)
+                DragGesture(minimumDistance: 0)
                     .onChanged {drag in
+                        if self.gestureStart {
+                            self.fadeUp()
+                        }
+                        self.gestureStart = false
                         let r = Polygon.radius(size:geometry.size)
                         let startDist = Polygon.distance(CGPoint(x:r, y:r), drag.startLocation)
                         let currentDist = Polygon.distance(CGPoint(x:r, y:r), drag.location)
@@ -66,10 +87,12 @@ struct ContentView : View {
                     self.sideCountInnerDelta = 0.0
                     self.sideCountOutterValue = self.computeSideValue(outterSlideCount)
                     self.sideCountOutterDelta = 0.0
+                    self.fadeDown()
+                    self.gestureStart = true
                 }
                 )
             }
-        }
+        }.onAppear(perform: fadeDown)
     }
 }
 
