@@ -14,13 +14,15 @@ struct ContentView : View {
     let maxSideCount = 36
     let outterScale:CGFloat = 1.0
     let innerScale:CGFloat = 0.5
+    let minAlpha:Double = 0.1
+    let maxAlpha:Double = 1.0
     @State var sideCountOutterValue:CGFloat = 0.5
     @State var sideCountInnerValue:CGFloat = 0.125
     @State var sideCountInnerDelta:CGFloat = 0.0
     @State var sideCountOutterDelta:CGFloat = 0.0
     @State var gestureStart:Bool = true
-    let minAlpha = 0.1
-    let maxAlpha = 1.0
+    @State var alphaFade:Double = 1.0
+
     func computeSideCount(_ value:CGFloat) -> Int {
         return Int(value * CGFloat(maxSideCount - minSideCount)) + minSideCount
     }
@@ -32,19 +34,18 @@ struct ContentView : View {
     }
     func fadeDown() -> Void {
         print( "fadeDown")
-        UIViewPropertyAnimator(duration: 1.0, curve: .easeOut, animations: {
-            let x = self.body.opacity(self.minAlpha)
-        }).startAnimation()
+        _ = withAnimation(.easeIn(duration:2.0)) {
+            self.alphaFade = self.minAlpha
+        }
     }
     func fadeUp() -> Void {
         print( "fadeUp")
-        UIViewPropertyAnimator(duration: 2.0, curve: .easeOut, animations: {
-            _ = self.body.opacity(self.maxAlpha)
-        }).startAnimation()
+        _ = withAnimation(.easeIn(duration:1.0)) {
+            self.alphaFade = self.maxAlpha
+        }
     }
 
     var body: some View {
-        var alphaFade = minAlpha
         var innerValue = clampValue( sideCountInnerValue + sideCountInnerDelta)
         var outterValue = clampValue( sideCountOutterValue + sideCountOutterDelta)
         if (sideCountInnerDelta > 0 && outterValue < innerValue) {
@@ -61,6 +62,7 @@ struct ContentView : View {
                 PolygonView(sideCount: outterSlideCount, scale:CGFloat(self.outterScale), color:Color.blue)
                 PolygonView(sideCount: innerSlideCount, scale:CGFloat(self.innerScale), color:Color.red)
             }
+            .contentShape(Rectangle()) // so gesture is detected for low opacity
             .gesture(
                 DragGesture(minimumDistance: 0)
                     .onChanged {drag in
@@ -92,7 +94,7 @@ struct ContentView : View {
                 }
                 )
             }
-        }.onAppear(perform: fadeDown)
+        }.opacity(self.alphaFade).onAppear(perform:fadeDown)
     }
 }
 
