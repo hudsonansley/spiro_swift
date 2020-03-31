@@ -14,7 +14,7 @@ struct ContentView : View {
     let maxSideCount = 36
     let outterScale:CGFloat = 1.0
     let innerScale:CGFloat = 0.5
-    let minAlpha:Double = 0.1
+    let minAlpha:Double = 0.2
     let maxAlpha:Double = 1.0
     @State var sideCountOutterValue:CGFloat = 0.5
     @State var sideCountInnerValue:CGFloat = 0.125
@@ -98,12 +98,18 @@ struct ContentView : View {
     }
 }
 
-#if DEBUG
-//struct ContentView_Previews : PreviewProvider {
-//    static var previews: some View {
-//        ContentView(sideCount: 0.5)
-//    }
-//}
+#if canImport(SwiftUI) && DEBUG
+import SwiftUI
+
+@available(iOS 13.0, *)
+struct ContentView_Previews : PreviewProvider {
+    static var previews: some View {
+        ContentView(sideCountOutterValue: 0.15, sideCountInnerValue: 0.07)
+//        .previewLayout(.sizeThatFits)
+        .padding(10)
+        .previewDevice("iPhone X")
+    }
+}
 #endif
 
 struct SideSlider : View {

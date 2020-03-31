@@ -8,7 +8,6 @@
 
 import Foundation
 import CoreGraphics
-import UIKit
 
 extension CGFloat {
     func radians() -> CGFloat {
@@ -42,5 +41,41 @@ class Polygon:NSObject {
 
     public class func radius(size: CGSize) -> CGFloat {
         return min(size.width, size.height) / 2.0
+    }
+
+    private class func convertCircleUnits(_ units:Int, wholeCircleValue:CGFloat, wholeCircleDegrees:Int = 360) -> CGFloat {
+        return wholeCircleValue * CGFloat(units % wholeCircleDegrees) / CGFloat(wholeCircleDegrees)
+    }
+
+    public class func circleUnitsToRads(_ units:Int, wholeCircle:Int = 360) -> CGFloat {
+        return convertCircleUnits(units, wholeCircleValue: 2.0 * .pi, wholeCircleDegrees:wholeCircle)
+    }
+
+    public class func circleUnitsToDegrees(_ units:Int, wholeCircle:Int = 360) -> CGFloat {
+        return convertCircleUnits(units, wholeCircleValue:360.0, wholeCircleDegrees:wholeCircle)
+    }
+
+    public class func GCF(_ _a:Int,_ _b:Int) -> Int {
+        var temp:Int
+        var a = _a
+        var b = _b
+        while (b != 0) {
+            temp = b
+            b = a % b
+            a = temp
+        }
+        return abs(a)
+    }
+
+    public class func fmod(_ a:CGFloat, _ _b:CGFloat) -> CGFloat {
+        var result:CGFloat = 0.0
+        let b = abs(_b)
+        if (b != 0.0) {
+            result = a - b * floor(a / b)
+            if result < 0.0 {
+                result += b
+            }
+        }
+        return result
     }
 }
