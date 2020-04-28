@@ -47,11 +47,11 @@ class Polygon:NSObject {
         return wholeCircleValue * CGFloat(units % wholeCircleDegrees) / CGFloat(wholeCircleDegrees)
     }
 
-    public class func circleUnitsToRads(_ units:Int, wholeCircle:Int = 360) -> CGFloat {
+    public class func circleUnitsToRads(_ units:Int, _ wholeCircle:Int = 360) -> CGFloat {
         return convertCircleUnits(units, wholeCircleValue: 2.0 * .pi, wholeCircleDegrees:wholeCircle)
     }
 
-    public class func circleUnitsToDegrees(_ units:Int, wholeCircle:Int = 360) -> CGFloat {
+    public class func circleUnitsToDegrees(_ units:Int, _ wholeCircle:Int = 360) -> CGFloat {
         return convertCircleUnits(units, wholeCircleValue:360.0, wholeCircleDegrees:wholeCircle)
     }
 

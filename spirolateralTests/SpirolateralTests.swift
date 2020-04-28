@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import spirolateral
+@testable import Spirolateral
 
 class spirolateralTests: XCTestCase {
 

@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:spirolateral.xcodeproj">
+      location = "self:/Users/hudsonansley/Documents/projects/spirolateral/Spirolateral.xcodeproj">
    </FileRef>
 </Workspace>

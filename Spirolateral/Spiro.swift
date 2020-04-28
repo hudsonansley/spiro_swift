@@ -9,8 +9,28 @@
 import Foundation
 import CoreGraphics
 
-struct Spiro {
-    init(numberOfTurns _numberOfTurns: Int, wholeCircle: Int, ang:Int, randomTurns:Bool = true) {
+public struct Vertex {
+    var point:CGPoint
+    var handle1:CGPoint?
+    var handle2:CGPoint?
+    init(_ _point:CGPoint, handle1 _handle1:CGPoint? = nil, handle2 _handle2:CGPoint? = nil) {
+        point = _point
+        handle1 = _handle1
+        handle2 = _handle2
+    }
+}
+
+public struct Spiro {
+    let spiroVertexList: [Vertex]
+    let angle: Int
+    let cycleCount: Int
+    let regPoint: CGPoint
+    var turnCount: Int {
+        get {
+            return spiroVertexList.count
+        }
+    }
+    init(numberOfTurns _numberOfTurns: Int, wholeCircle: Int, ang:Int, randomTurns:Bool = false, rounded:Bool = false) {
         var numberOfTurns = _numberOfTurns
         var theta:Int = 0
         var turns = [Int]()
@@ -26,28 +46,72 @@ struct Spiro {
             } else {
                 turns[i] = 1
             }
-            pt.x += CGFloat(i + 1) * cos(realAngle);
-            pt.y += CGFloat(i + 1) * sin(realAngle);
+            pt.x += CGFloat(i + 1) * cos(realAngle)
+            pt.y += CGFloat(i + 1) * sin(realAngle)
+            theta = ((turns[i] * ang) + theta) % wholeCircle
+            realAngle = Polygon.circleUnitsToRads(theta, wholeCircle)
+            i += 1
+        }
+        numberOfTurns = i
+        angle = theta
+        cycleCount = wholeCircle / Polygon.GCF(wholeCircle, theta)
+        var phi:CGFloat
+        var chi:CGFloat
+        var r:CGFloat
+        var tx = pt.x
+        var ty = pt.y
+        if ( tx == 0.0 ) { //TODO - should be able to just add .pi when ty < 0 instead of repeating the same expressions
+            phi = (ty < 0.0) ? -.pi / 2 : .pi / 2
+        } else {
+            phi = (tx < 0.0) ? .pi + atan( ty / tx ) : atan( ty / tx )
+        }
+        chi = Polygon.fmod(( .pi - realAngle ) / 2, .pi)
+        r = -sqrt( tx * tx + ty * ty ) / 2 / cos(chi)
+        let center = CGPoint(x: r * cos(phi + chi), y: r * sin(phi + chi))
+        pt = .zero
+        spiroVertexList = Array(repeating: Vertex(.zero), count: numberOfTurns)
+        r = 0.0
+        theta = 0
+        var t1:Int
+        var t2:Int
+        var lastTheta:Int = 0
+        var deltaAngle:CGFloat
+        var tAng:CGFloat = 0.0
+        realAngle = 0.0
+        var temp:CGFloat;
+        let handleScale:CGFloat = 2.7
+        for (i, var vert) in spiroVertexList.enumerated() {
+            lastTheta = theta;
+            pt.x += CGFloat(i+1) * cos(realAngle)
+            pt.y += CGFloat(i+1) * sin(realAngle)
+            vert.point = pt
             theta = ((turns[i] * ang) + theta) % wholeCircle;
-            realAngle = Polygon.circleUnitsToRads(theta, wholeCircle: wholeCircle);
-            i += 1;
+            realAngle = Polygon.circleUnitsToRads(theta, wholeCircle);
+            if (rounded) {
+                deltaAngle = CGFloat(theta - lastTheta) / 2.0
+                tAng = CGFloat(wholeCircle) / 4.0
+                if  (deltaAngle < 0) {
+                    t1 = lastTheta + Int(deltaAngle - tAng)
+                    t2 = lastTheta + Int(deltaAngle + tAng)
+                } else {
+                    t1 = lastTheta + Int(deltaAngle + tAng)
+                    t2 = lastTheta + Int(deltaAngle - tAng)
+                }
+                tAng = Polygon.circleUnitsToRads(t1, wholeCircle)
+                vert.handle1 = CGPoint(x:CGFloat(i+2) / handleScale * cos(tAng), y:CGFloat(i+2) / handleScale * sin(tAng))
+                tAng = Polygon.circleUnitsToRads(t2, wholeCircle)
+                vert.handle2 = CGPoint(x:CGFloat(i+1) / handleScale * cos(tAng), y:CGFloat(i+1) / handleScale * sin(tAng))
+            }
+            tx = pt.x + center.x
+            ty = pt.y + center.y
+            temp = tx * tx + ty * ty
+            if (temp > r) {
+                r = temp;
+            }
         }
-        numberOfTurns = i;
-        angle = theta;
-
-        spiroVertexList = []
-        cycleCount = 1
-        regPoint = .zero
+        let scale = sqrt(r) * 2.0
+        regPoint = CGPoint(x:center.x / scale, y:center.y / scale);
     }
-    let spiroVertexList: [CGPoint]
-    let angle: Int
-    var turnCount: Int {
-        get {
-            return spiroVertexList.count
-        }
-    }
-    let cycleCount: Int
-    let regPoint: CGPoint
 }
 
 
