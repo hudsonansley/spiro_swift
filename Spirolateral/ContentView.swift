@@ -48,6 +48,7 @@ struct ContentView : View {
     var body: some View {
         var innerValue = clampValue( sideCountInnerValue + sideCountInnerDelta)
         var outterValue = clampValue( sideCountOutterValue + sideCountOutterDelta)
+        let lineWidth:CGFloat = 16.0
         if (sideCountInnerDelta > 0 && outterValue < innerValue) {
             outterValue = innerValue
         }
@@ -59,8 +60,11 @@ struct ContentView : View {
         return VStack {
             GeometryReader { geometry in
             ZStack {
-                PolygonView(sideCount: outterSlideCount, scale:CGFloat(self.outterScale), color:Color.blue)
-                PolygonView(sideCount: innerSlideCount, scale:CGFloat(self.innerScale), color:Color.red)
+                PolygonShape(sideCount: outterSlideCount, scale:
+                    CGFloat(self.outterScale))
+                .stroke(Color.blue, lineWidth: lineWidth)
+                PolygonShape(sideCount: innerSlideCount, scale:CGFloat(self.innerScale))
+                .stroke(Color.red, lineWidth: lineWidth)
             }
             .contentShape(Rectangle()) // so gesture is detected for low opacity
             .gesture(

@@ -16,7 +16,7 @@
 		7D96DF3922CF9DF80079503B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D96DF3722CF9DF80079503B /* LaunchScreen.storyboard */; };
 		7D96DF4422CF9DF80079503B /* SpirolateralTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D96DF4322CF9DF80079503B /* SpirolateralTests.swift */; };
 		7D96DF4F22CFE7340079503B /* Polygon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D96DF4E22CFE7340079503B /* Polygon.swift */; };
-		7D96DF5122D0D3380079503B /* PolygonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D96DF5022D0D3380079503B /* PolygonView.swift */; };
+		7D96DF5122D0D3380079503B /* PolygonShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D96DF5022D0D3380079503B /* PolygonShape.swift */; };
 		7D9E80C72457D63A00C2C2EA /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7D96DF4522CF9DF80079503B /* Info.plist */; };
 		7DB6DEA02431640C002FB2AD /* Spiro.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DB6DE9F2431640C002FB2AD /* Spiro.swift */; };
 		7DB6DEA12431640C002FB2AD /* Spiro.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DB6DE9F2431640C002FB2AD /* Spiro.swift */; };
@@ -47,7 +47,7 @@
 		7D96DF4322CF9DF80079503B /* SpirolateralTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpirolateralTests.swift; sourceTree = "<group>"; };
 		7D96DF4522CF9DF80079503B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7D96DF4E22CFE7340079503B /* Polygon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Polygon.swift; sourceTree = "<group>"; };
-		7D96DF5022D0D3380079503B /* PolygonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolygonView.swift; sourceTree = "<group>"; };
+		7D96DF5022D0D3380079503B /* PolygonShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolygonShape.swift; sourceTree = "<group>"; };
 		7DB6DE9F2431640C002FB2AD /* Spiro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spiro.swift; sourceTree = "<group>"; };
 		7DECC3BC24354ADC009945D9 /* UIColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -95,7 +95,7 @@
 				7D96DF2C22CF9DF60079503B /* AppDelegate.swift */,
 				7D96DF2E22CF9DF60079503B /* SceneDelegate.swift */,
 				7D96DF3022CF9DF60079503B /* ContentView.swift */,
-				7D96DF5022D0D3380079503B /* PolygonView.swift */,
+				7D96DF5022D0D3380079503B /* PolygonShape.swift */,
 				7D96DF3222CF9DF80079503B /* Assets.xcassets */,
 				7D96DF3722CF9DF80079503B /* LaunchScreen.storyboard */,
 				7D96DF3A22CF9DF80079503B /* Info.plist */,
@@ -240,7 +240,7 @@
 				7D96DF2F22CF9DF60079503B /* SceneDelegate.swift in Sources */,
 				7DB6DEA02431640C002FB2AD /* Spiro.swift in Sources */,
 				7D96DF3122CF9DF60079503B /* ContentView.swift in Sources */,
-				7D96DF5122D0D3380079503B /* PolygonView.swift in Sources */,
+				7D96DF5122D0D3380079503B /* PolygonShape.swift in Sources */,
 				7DECC3BD24354ADC009945D9 /* UIColorExtensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
